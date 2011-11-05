@@ -150,11 +150,13 @@ __END__
 
     }
 
+    use Plack::Builder;
+
     my $app = My::ResetPass->new;
 
-    my $mounted_app = builder {
+    builder {
         mount "/forgotten_pass" => builder {
-            sub{ $app->call( shift ) };
+            $app->to_app;
         };
     };
 

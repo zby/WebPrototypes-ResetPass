@@ -28,7 +28,7 @@ my $app = My::ResetPass->new;
 
 my $mounted_app = builder {
     mount "/forgotten_pass" => builder {
-        sub{ $app->call( shift ) };
+        $app->to_app;
     };
 };
 
