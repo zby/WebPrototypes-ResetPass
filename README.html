@@ -1,0 +1,161 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Plack::App::ResetPass - Plack application for sending a 'Reset password link' via email</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:zby@zby.(none)" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#pure_virtual_methods">PURE VIRTUAL METHODS</a></li>
+		<li><a href="#virtual_methods">VIRTUAL METHODS</a></li>
+		<li><a href="#other_methods">OTHER METHODS</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>Plack::App::ResetPass - (Experimental) Plack application for sending a 'Reset password link' via email</p>
+<p>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<p>version 0.001</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    {
+        package My::ResetPass;
+        use parent 'Plack::App::ResetPass';</pre>
+<pre>
+        sub find_user {
+            my( $self, $name ) = @_;
+            return 1, 'test@example.com', 'a' if $name eq 'right_name';
+            return;
+        }</pre>
+<pre>
+        sub send_mail {
+            my( $self, $email ) = @_;
+            return $email;
+        }</pre>
+<pre>
+        sub update_user {}</pre>
+<pre>
+    }</pre>
+<pre>
+    my $app = My::ResetPass-&gt;new;</pre>
+<pre>
+    my $mounted_app = builder {
+        mount &quot;/forgotten_pass&quot; =&gt; builder {
+            sub{ $app-&gt;call( shift ) };
+        };
+    };</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This application implements the common reset forgotten password mechanism.
+It has two pages.  First page where the user enters his login details and 
+if they are correct an email with a link (with a random verification token)
+to the password reset page is sent.
+Second page - the password reset page - checks the token - and lets the user
+to choose a new password.</p>
+<p>This application uses the Template Method design pattern.</p>
+<p>
+</p>
+<h2><a name="pure_virtual_methods">PURE VIRTUAL METHODS</a></h2>
+<p>These methods need to be overriden in subclass.</p>
+<dl>
+<dt><strong><a name="find_user" class="item">find_user ( name )</a></strong></dt>
+
+<dd>
+<p>Should return a following tuple
+    $user, $user_email, $verification_token</p>
+<p>The <code>$user</code> is user object - passed to the <a href="#update_user"><code>update_user</code></a> method</p>
+</dd>
+<dt><strong><a name="update_user" class="item">update_user ( user, %params )</a></strong></dt>
+
+<dd>
+<p>Should update the user object with %params. 
+It is used for saving the new password and verification token.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="virtual_methods">VIRTUAL METHODS</a></h2>
+<p>These methods have defaults - but should probably be overriden anyway.</p>
+<dl>
+<dt><strong><a name="wrap_text" class="item">wrap_text ( text )</a></strong></dt>
+
+<dd>
+<p>Should return the html page containing the passed text fragment.  By default it just adds
+the html and body tags.</p>
+</dd>
+<dt><strong><a name="build_mail" class="item">build_mail ( to_address, link_to_the_reset_page )</a></strong></dt>
+
+<dd>
+<p>Should create the email containing the link.</p>
+</dd>
+<dt><strong><a name="send_mail" class="item">send_mail ( mail )</a></strong></dt>
+
+<dd>
+<p>Should send the mail (created by build_mail).</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="other_methods">OTHER METHODS</a></h2>
+<dl>
+<dt><strong><a name="call" class="item">call ( env )</a></strong></dt>
+
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>Plack</em>
+<a href="/Plack/Middleware/Auth/Form.html">the Plack::Middleware::Auth::Form manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Zbigniew Lukasiak &lt;<a href="mailto:zby@cpan.org">zby@cpan.org</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h1>
+<p>This software is Copyright (c) 2011 by Zbigniew Lukasiak &lt;<a href="mailto:zby@cpan.org">zby@cpan.org</a>&gt;.</p>
+<p>This is free software, licensed under:</p>
+<pre>
+  The Artistic License 2.0 (GPL Compatible)</pre>
+
+</body>
+
+</html>
