@@ -134,18 +134,19 @@ __END__
         package My::ResetPass;
         use parent 'Plack::App::ResetPass';
 
+        # connecting with DBIx::Class
+
         sub find_user {
             my( $self, $name ) = @_;
-            return 1, 'test@example.com', 'a' if $name eq 'right_name';
+            my $user = $schema->resultset( 'User' )->search({ username =>  $name })->next;
+            return $user, $user->email, $user->pass_token if $user;
             return;
         }
 
-        sub send_mail {
-            my( $self, $email ) = @_;
-            return $email;
+        sub update_user {
+            my( $self, $user, %attrs ) = @_;
+            $user->update( \%attrs ); 
         }
-
-        sub update_user {}
 
     }
 
