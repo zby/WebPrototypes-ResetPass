@@ -141,11 +141,11 @@ version 0.001
 
 =head1 SYNOPSIS
 
+    # connecting with DBIx::Class
     {
         package My::ResetPass;
         use parent 'Plack::App::ResetPass';
-
-        # connecting with DBIx::Class
+        use Plack::Util::Accessor qw( schema );
 
         sub find_user {
             my( $self, $name ) = @_;
@@ -155,15 +155,15 @@ version 0.001
         }
 
         sub update_user {
-            my( $self, $user, %attrs ) = @_;
-            $user->update( \%attrs ); 
+            my( $self, $user, $attrs ) = @_;
+            $user->update( $attrs ); 
         }
 
     }
 
     use Plack::Builder;
 
-    my $app = My::ResetPass->new;
+    my $app = My::ResetPass->new( schema => $schema );
 
     builder {
         mount "/forgotten_pass" => builder {
@@ -195,9 +195,9 @@ Should return a following tuple
 
 The C<$user> is user object - passed to the C<update_user> method
 
-=item update_user ( user, %params )
+=item update_user ( user, params )
 
-Should update the user object with %params. 
+Should update the user object with params. 
 It is used for saving the new password and verification token.
 
 =back
