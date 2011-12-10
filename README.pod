@@ -1,10 +1,7 @@
 use strict;
 use warnings;
 
-package Plack::App::ResetPass;
-BEGIN {
-  $Plack::App::ResetPass::VERSION = '0.001';
-}
+package WebPrototypes::ResetPass;
 use parent qw(Plack::Component);
 use Plack::Request;
 use URL::Encode 'url_encode_utf8';
@@ -127,24 +124,16 @@ END
 
 1;
 
+__END__
 
-
-=pod
-
-=head1 NAME
-
-Plack::App::ResetPass - (Experimental) Plack application for sending a 'Reset password link' via email
-
-=head1 VERSION
-
-version 0.001
+# ABSTRACT: (Experimental) Plack application for sending a 'Reset password link' via email
 
 =head1 SYNOPSIS
 
     # connecting with DBIx::Class
     {
         package My::ResetPass;
-        use parent 'Plack::App::ResetPass';
+        use parent 'WebPrototypes::ResetPass';
         use Plack::Util::Accessor qw( schema );
 
         sub find_user {
@@ -173,7 +162,10 @@ version 0.001
 
 =head1 DESCRIPTION
 
-This application implements the common reset forgotten password mechanism.
+This application implements the common reset forgotten password mechanism
+in a storage independent way.  The examples here are with DBIx::Class
+but they can be easily ported to other storage layers.
+
 It has two pages.  First page where the user enters his login details and 
 if they are correct an email with a link (with a random verification token)
 to the password reset page is sent.
@@ -236,23 +228,5 @@ Should send the mail (created by build_mail).
 L<Plack>
 L<Plack::Middleware::Auth::Form> 
 
-=head1 AUTHOR
-
-Zbigniew Lukasiak <zby@cpan.org>
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is Copyright (c) 2011 by Zbigniew Lukasiak <zby@cpan.org>.
-
-This is free software, licensed under:
-
-  The Artistic License 2.0 (GPL Compatible)
-
 =cut
-
-
-__END__
-
-# ABSTRACT: (Experimental) Plack application for sending a 'Reset password link' via email
-
 

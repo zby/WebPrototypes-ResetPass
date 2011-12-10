@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-package Plack::App::ResetPass;
+package WebPrototypes::ResetPass;
 use parent qw(Plack::Component);
 use Plack::Request;
 use URL::Encode 'url_encode_utf8';
@@ -133,7 +133,7 @@ __END__
     # connecting with DBIx::Class
     {
         package My::ResetPass;
-        use parent 'Plack::App::ResetPass';
+        use parent 'WebPrototypes::ResetPass';
         use Plack::Util::Accessor qw( schema );
 
         sub find_user {
@@ -162,7 +162,10 @@ __END__
 
 =head1 DESCRIPTION
 
-This application implements the common reset forgotten password mechanism.
+This application implements the common reset forgotten password mechanism
+in a storage independent way.  The examples here are with DBIx::Class
+but they can be easily ported to other storage layers.
+
 It has two pages.  First page where the user enters his login details and 
 if they are correct an email with a link (with a random verification token)
 to the password reset page is sent.

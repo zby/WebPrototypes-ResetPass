@@ -7,7 +7,7 @@ use Plack::Builder;
 
 {
     package My::ResetPass;
-    use parent 'Plack::App::ResetPass';
+    use parent 'WebPrototypes::ResetPass';
 
     sub find_user {
         my( $self, $name ) = @_;
