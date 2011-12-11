@@ -47,8 +47,9 @@ sub _index {
             return $self->build_reply( "User not found" );
         }
         else{
-            $self->update_user( $user, { pass_token => random_regex( '\w{40}' ) });
-            $self->_send_pass_token( $env, $user, $username, $email );
+            my $pass_token = random_regex( '\w{40}' );
+            $self->update_user( $user, { pass_token => $pass_token });
+            $self->_send_pass_token( $env, $user, $username, $email, $pass_token );
             return $self->build_reply( "Email sent" );
         }
     }
@@ -89,7 +90,7 @@ sub _send_pass_token {
     my $reset_url = URI->new( $my_server );
     $reset_url->path( $env->{SCRIPT_NAME} . '/reset' );
     $reset_url->query_form( name => $username, pass_token => $pass_token );
-    $self->send_mail( $self->build_email( $email, $reset_url ) );
+    $self->send_mail( $self->build_email( $email, $reset_url ), $pass_token );
 }
 
 sub _reset {
@@ -185,7 +186,7 @@ These methods need to be overriden in subclass.
 Should return a following tuple
     $user, $user_email, $verification_token
 
-The C<$user> is user object - passed to the C<update_user> method
+The C<$user> is user object or user id - passed to the C<update_user> method
 
 =item update_user ( user, params )
 

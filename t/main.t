@@ -5,6 +5,10 @@ use Test::More;
 use Test::WWW::Mechanize::PSGI;
 use Plack::Builder;
 
+my $email;
+my $pass_token;
+my $password;
+
 {
     package My::ResetPass;
     use parent 'WebPrototypes::ResetPass';
@@ -16,11 +20,15 @@ use Plack::Builder;
     }
 
     sub send_mail {
-        my( $self, $email ) = @_;
-        return $email;
+        my( $self, $email_ ) = @_;
+        $email = $email_;
     }
 
-    sub update_user {}
+    sub update_user {
+        my( $self, $user, $params ) = @_;
+        $pass_token = $params->{pass_token};
+        $password   = $params->{password};
+    }
 
 }
 
@@ -54,6 +62,9 @@ $mech->submit_form_ok( {
 );
 $mech->content_contains( 'Email sent', 'email sent' );
 
+is( scalar( $email->header( 'To' ) ), 'test@example.com', 'Confirmation email recepient' );
+like( $email->body, qr/token=$pass_token/, 'Email contains link with the right token' );
+
 $mech->get_ok( '/forgotten_pass/reset?name=right_name&token=aaaa', 'reset token' );
 $mech->content_contains( 'Token invalid', 'invalid reset token' );
 $mech->get_ok( '/forgotten_pass/reset?name=right_name&token=a', 'reset token' );
@@ -65,5 +76,7 @@ $mech->submit_form_ok( {
     },
     'ResetPass for test'
 );
+
+is( $password, 'new password', 'Password reset' );
 
 done_testing;
