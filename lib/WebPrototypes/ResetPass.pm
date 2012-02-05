@@ -11,7 +11,7 @@ use Email::Sender::Simple qw(sendmail);
 use Email::Simple;
 use Email::Simple::Creator;
 
-use feature ':5.10'; 
+use 5.0100; 
 
 sub find_user { die 'find_user needs to be implemented in subclass' }
 
@@ -206,7 +206,11 @@ These methods have defaults - but should probably be overriden anyway.
 Should return the html page containing the passed text fragment.  By default it just adds
 the html and body tags.
 
-=item build_mail ( to_address, link_to_the_reset_page )
+=item build_reply ( page_body )
+
+Should return the PSGI response data structure.
+
+=item build_email ( to_address, link_to_the_reset_page )
 
 Should create the email containing the link.
 
