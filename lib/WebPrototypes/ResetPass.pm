@@ -89,7 +89,7 @@ sub _send_pass_token {
     );
     my $reset_url = URI->new( $my_server );
     $reset_url->path( $env->{SCRIPT_NAME} . '/reset' );
-    $reset_url->query_form( name => $username, pass_token => $pass_token );
+    $reset_url->query_form( name => $username, token => $pass_token );
     $self->send_mail( $self->build_email( $email, $reset_url ), $pass_token );
 }
 

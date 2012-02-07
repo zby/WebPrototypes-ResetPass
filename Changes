@@ -1,5 +1,8 @@
 Revision history for WebPrototypes::ResetPass.
 
-{{$NEXT}}
+0.001     2012-02-05
     First release
+
+{{$NEXT}}
+    url in email fixed
 
