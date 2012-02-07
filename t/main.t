@@ -63,7 +63,7 @@ $mech->submit_form_ok( {
 $mech->content_contains( 'Email sent', 'email sent' );
 
 is( scalar( $email->header( 'To' ) ), 'test@example.com', 'Confirmation email recepient' );
-like( $email->body, qr/token=$pass_token/, 'Email contains link with the right token' );
+like( $email->body, qr/\btoken=$pass_token/, 'Email contains link with the right token' );
 
 $mech->get_ok( '/forgotten_pass/reset?name=right_name&token=aaaa', 'reset token' );
 $mech->content_contains( 'Token invalid', 'invalid reset token' );
