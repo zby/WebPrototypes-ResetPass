@@ -34,6 +34,9 @@ sub call {
     if( $path eq '/reset' ){
         return $self->_reset( $env );
     }
+    if( $path eq '/after' ){
+        return $self->build_reply( "Password reset - you can now login with the new one" );
+    }
     return $self->_index( $env );
 }
 
@@ -105,7 +108,11 @@ sub _reset {
     else{
         if( $req->method eq 'POST' ){
             $self->update_user( $user, { pass_token => undef, password => $req->param( 'password' ) } );
-            return $self->build_reply( 'Password reset' );
+            return [
+                301,
+                [ Location => 'after'],
+                [ $self->wrap_text( "Password reset" ) ]
+            ];
         }
         else{
             my $encoded_name = url_encode_utf8( $name );
